@@ -1,4 +1,4 @@
-﻿''' Plugin for CudaText editor
+''' Plugin for CudaText editor
 Authors:
     Andrey Kvichansky    (kvichans on github.com)
 Version:
@@ -162,6 +162,11 @@ class Command:
             for h in app.ed_handles():
                 e = app.Editor(h)
                 e.set_prop(app.PROP_MODIFIED, False)
+                # also clear secondary editor (split tab with unlinked editors)
+                if not e.get_prop(app.PROP_EDITORS_LINKED):
+                    h_sec = e.get_prop(app.PROP_HANDLE_SECONDARY)
+                    if h_sec:
+                        app.Editor(h_sec).set_prop(app.PROP_MODIFIED, False)
 
         app.ed.cmd(cmds.cmd_FileCloseAll)
         pass;                  #LOG and log('ok',())
